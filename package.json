@@ -1,0 +1,37 @@
+{
+  "name": "test-x-partners",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "npm": ">=10.2.4",
+    "node": ">=v20.11.1"
+  },
+  "repository": {
+    "url": "https://github.com/AleksandrMenshchikov/test-x-partners"
+  },
+  "author": {
+    "name": "Aleksandr Menshchikov",
+    "email": "aleksandr.menshchikov1982@gmail.com"
+  },
+  "scripts": {
+    "dev": "npm run dev:client & npm run dev:server",
+    "dev:client": "npm run dev -w packages/client",
+    "dev:server": "npm run dev -w packages/server",
+    "build:client": "npm run build -w packages/client",
+    "build:server": "npm run build -w packages/server",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "npm run lint -w packages/client",
+    "lint:server": "npm run lint -w packages/server",
+    "format": "npm run format:client && npm run format:server",
+    "format:client": "npm run format -w packages/client",
+    "format:server": "npm run format -w packages/server",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11"
+  }
+}

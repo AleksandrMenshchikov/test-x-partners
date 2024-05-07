@@ -1,0 +1,12 @@
+:root {
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --error-color: #d32f2f;
+}
+
+#root {
+  min-height: 100vh;
+}
