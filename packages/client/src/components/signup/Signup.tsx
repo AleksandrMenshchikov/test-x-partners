@@ -27,6 +27,8 @@ import {
 } from '../../shared/constants.ts';
 import * as validator from 'validator';
 import { useCreateUserMutation } from '../../redux/features/usersApi.ts';
+import { setUser } from '../../redux/features/userSlice.ts';
+import { useAppDispatch } from '../../redux/store.ts';
 
 const inputStyle = {
   width: '100%',
@@ -58,14 +60,18 @@ export const Signup = () => {
     useCreateUserMutation();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isError) {
       setIsOpenDialog(true);
     } else if (data) {
+      dispatch(
+        setUser((data as { data: { [index: string]: null | string } }).data)
+      );
       navigate('/people', { replace: true });
     }
-  }, [isError, data, navigate]);
+  }, [isError, data, navigate, dispatch]);
 
   function handleClickShowPassword() {
     setShowPassword((show) => !show);

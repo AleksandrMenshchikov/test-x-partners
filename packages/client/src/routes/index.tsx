@@ -4,6 +4,7 @@ import { ErrorPage } from '../pages/ErrorPage.tsx';
 import { RootPage } from '../pages/RootPage.tsx';
 import { SigninPage } from '../pages/SigninPage.tsx';
 import { PeoplePage } from '../pages/PeoplePage.tsx';
+import { AccountPage } from '../pages/AccountPage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: '/people',
         element: <PeoplePage />,
+      },
+      {
+        path: '/account',
+        element: <AccountPage />,
       },
     ],
   },

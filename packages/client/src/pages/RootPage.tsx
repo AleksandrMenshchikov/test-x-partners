@@ -22,10 +22,12 @@ export const RootPage = () => {
       dispatch(
         setUser((data as { data: { [index: string]: null | string } }).data)
       );
-      navigate('/people', { replace: true });
+      if (!['/people', '/account'].includes(location.pathname)) {
+        navigate('/people', { replace: true });
+      }
       setShowOutlet(true);
     }
-  }, [isError, data]);
+  }, [isError, data, dispatch, navigate]);
 
   if (isLoading) {
     return (

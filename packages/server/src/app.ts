@@ -13,16 +13,15 @@ import { errorLogger, requestLogger } from './middlewares/logger';
 import { validateAuth } from './validators/validateAuth';
 import { createUser, login } from './controllers/users';
 import { validateCreateUser } from './validators/validateCreateUser';
-import multer from 'multer';
-import { storage } from './shared/multer';
+import { upload } from './shared/multer';
 import { validateLogin } from './validators/validateLogin';
+import * as path from 'node:path';
 
 mongoose
   .connect(process.env.DB_URI as string)
   .then(() => console.log('Mongoose connected to database'))
   .catch((error) => console.log(error));
 
-const upload = multer({ storage });
 const app = express();
 app.use(helmet());
 app.use(limiter);
@@ -35,6 +34,14 @@ app.use(requestLogger);
 app.post('/signup', upload.single('image'), validateCreateUser(), createUser);
 app.post('/signin', validateLogin(), login);
 app.use(validateAuth(), auth);
+app.use(
+  '/',
+  (_req, res, next) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+  },
+  express.static(path.join(__dirname, 'public'))
+);
 app.use(router);
 app.use(errorLogger);
 

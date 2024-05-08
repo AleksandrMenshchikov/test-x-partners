@@ -30,7 +30,7 @@ export async function createUser(
 
     const data = await User.create({
       ...rest,
-      image: req.file ? req.file.filename : null,
+      image: req.file ? req.file.filename : 'plug.jpeg',
       email,
       password: hash,
     });
@@ -110,4 +110,95 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
   } catch (err) {
     next(err);
   }
+}
+
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) {
+    throw new Unauthorized('Необходима авторизация');
+  }
+
+  try {
+    const { _id } = req.user;
+    const { name, password }: TUser = req.body;
+
+    let data: unknown;
+
+    if (password) {
+      const hash = await bcrypt.hash(password, 10);
+      data = await User.findByIdAndUpdate(
+        _id,
+        {
+          password: hash,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    }
+
+    if (req.file) {
+      data = await User.findByIdAndUpdate(
+        _id,
+        {
+          image: req.file.filename,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    }
+
+    if (name) {
+      data = await User.findByIdAndUpdate(
+        _id,
+        {
+          name,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    }
+
+    if (!data) {
+      throw new NotFound(
+        responseText['Пользователь по указанному _id не найден']
+      );
+    } else {
+      res.status(statusCode.OK).send({ [DATA]: data });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getUsers(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) {
+    throw new Unauthorized('Необходима авторизация');
+  }
+
+  try {
+    const data = await User.find({ _id: { $ne: req.user._id } });
+    res.status(statusCode.OK).send({ [DATA]: data });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export function signout(_: Request, res: Response): void {
+  res
+    .clearCookie('jwt')
+    .status(statusCode.OK)
+    .json({ [DATA]: 'ok' });
 }

@@ -47,7 +47,7 @@ const userSchema = new Schema<TUser>(
     },
     image: {
       type: String,
-      default: null,
+      default: 'plug.jpeg',
     },
   },
   {
